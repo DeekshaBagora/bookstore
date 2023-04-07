@@ -7,7 +7,7 @@ maven 'maven'
 stages {
 stage("Git Checkout"){
 steps{
-git 'https://github.com/SaiRevanth-J/project-03-medicure.git'
+git 'https://github.com/sruthisodima/Medicure.git'
  }
  }
 stage('Build the application'){
@@ -26,15 +26,15 @@ stage('Docker build image') {
               steps {
                   
                   sh'sudo docker system prune -af '
-                  sh 'sudo docker build -t revanthkumar9/medicure:latest . '
+                  sh 'sudo docker build -t sruthimotepalli/medicure:latest . '
               
                 }
             }
 stage('Docker login and push') {
               steps {
                    withCredentials([string(credentialsId: 'docpass', variable: 'docpasswd')]) {
-                  sh 'sudo docker login -u revanthkumar9 -p ${docpasswd} '
-                  sh 'sudo docker push revanthkumar9/medicure:latest'
+                  sh 'sudo docker login -u sruthimotepalli -p ${docpasswd} '
+                  sh 'sudo docker push sruthimotepalli/medicure:latest'
                   }
                 }
         }    
@@ -52,15 +52,15 @@ stage('Docker login and push') {
         }
 stage('deploy to application to kubernetes'){
 steps{
-sh 'sudo chmod 600 ./terraform_files/DEMOKEY.pem'    
-sh 'sudo scp -o StrictHostKeyChecking=no -i ./terraform_files/DEMOKEY.pem medicure-deployment.yml ubuntu@172.31.21.225:/home/ubuntu/'
-sh 'sudo scp -o StrictHostKeyChecking=no -i ./terraform_files/DEMOKEY.pem medicure-service.yml ubuntu@172.31.21.225:/home/ubuntu/'
+sh 'sudo chmod 600 ./terraform_files/jenkinskey.pem'    
+sh 'sudo scp -o StrictHostKeyChecking=no -i ./terraform_files/jenkinskey.pem medicure-deployment.yml ubuntu@172.31.36.166:/home/ubuntu/'
+sh 'sudo scp -o StrictHostKeyChecking=no -i ./terraform_files/jenkinskey.pem medicure-service.yml ubuntu@172.31.36.166:/home/ubuntu/'
 script{
 try{
-sh 'ssh -i ./terraform_files/DEMOKEY.pem ubuntu@172.31.21.225 kubectl apply -f .'
+sh 'ssh -i ./terraform_files/jenkinskey.pem ubuntu@172.31.36.166 kubectl apply -f .'
 }catch(error)
 {
-sh 'ssh -i ./terraform_files/DEMOKEY.pem ubuntu@172.31.21.225 kubectl apply -f .'
+sh 'ssh -i ./terraform_files/jenkinskey.pem ubuntu@172.31.36.166 kubectl apply -f .'
 }
 }
 }
