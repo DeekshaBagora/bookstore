@@ -16,7 +16,7 @@ spec:
     spec:
        containers:
          - name: addressbook
-           image: revanthkumar9/medicure:latest
+           image: sruthimotepalli/medicure:latest
            ports:
              - containerPort: 8082
                name: http-web-app-01
